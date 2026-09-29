@@ -1,0 +1,448 @@
+LAMMPS (22 Jul 2025 - Update 6)
+OMP_NUM_THREADS environment is not set. Defaulting to 1 thread.
+  using 1 OpenMP thread(s) per MPI task
+processors * * 1
+
+units lj
+atom_style angle
+dimension 3
+boundary p p p
+timestep 0.1
+
+read_data vesicle.data
+Reading data file ...
+  orthogonal box = (-38 -38 -38) to (38 38 38)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  120000 atoms
+  scanning bonds ...
+  1 = max bonds/atom
+  scanning angles ...
+  1 = max angles/atom
+  orthogonal box = (-38 -38 -38) to (38 38 38)
+  1 by 1 by 1 MPI processor grid
+  reading bonds ...
+  80000 bonds
+  reading angles ...
+  40000 angles
+Finding 1-2 1-3 1-4 neighbors ...
+  special bond factors lj:    0        0        0       
+  special bond factors coul:  0        0        0       
+     2 = max # of 1-2 neighbors
+     1 = max # of 1-3 neighbors
+     1 = max # of 1-4 neighbors
+     2 = max # of special neighbors
+  special bonds CPU = 0.050 seconds
+  read_data CPU = 1.075 seconds
+group all type 1 2
+120000 atoms in group all
+group membrane type 1 2
+88000 atoms in group membrane
+group heads type 1 3
+40000 atoms in group heads
+bond_style hybrid fene
+special_bonds lj 0.0 1.0 1.0
+Finding 1-2 1-3 1-4 neighbors ...
+  special bond factors lj:    0        1        1       
+  special bond factors coul:  0        0        0       
+     2 = max # of 1-2 neighbors
+     1 = max # of 1-3 neighbors
+     1 = max # of 1-4 neighbors
+     2 = max # of special neighbors
+  special bonds CPU = 0.038 seconds
+bond_coeff 1 fene 30.0 1.5 1.0 1.0
+
+angle_style hybrid harmonic
+angle_coeff 1 harmonic 5.0 180.0
+
+comm_modify cutoff 2.0
+pair_style soft 1.0
+
+pair_coeff * * 1 0.5
+fix 1 all nve/limit 0.1
+run 5000
+Generated 0 of 3 mixed pair_coeff terms from geometric mixing rule
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 0.8
+  ghost atom cutoff = 2
+  binsize = 0.4, bins = 190 190 190
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair soft, perpetual
+      attributes: half, newton on
+      pair build: half/bin/newton
+      stencil: half/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 74.49 | 74.49 | 74.49 Mbytes
+   Step          Temp          E_pair         E_mol          TotEng         Press     
+         0   0              0.42960606     13.891867      14.321473     -1.7453426    
+      5000   0.32385471     2.106235e-06   16.598338      17.084118      0.90408154   
+Loop time of 125.936 on 1 procs for 5000 steps with 120000 atoms
+
+Performance: 343032.037 tau/day, 39.703 timesteps/s, 4.764 Matom-step/s
+100.0% CPU use with 1 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 29.1       | 29.1       | 29.1       |   0.0 | 23.11
+Bond    | 44.422     | 44.422     | 44.422     |   0.0 | 35.27
+Neigh   | 21.141     | 21.141     | 21.141     |   0.0 | 16.79
+Comm    | 1.2187     | 1.2187     | 1.2187     |   0.0 |  0.97
+Output  | 0.0006786  | 0.0006786  | 0.0006786  |   0.0 |  0.00
+Modify  | 24.4       | 24.4       | 24.4       |   0.0 | 19.37
+Other   |            | 5.653      |            |       |  4.49
+
+Nlocal:         120000 ave      120000 max      120000 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:         194174 ave      194174 max      194174 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 194174
+Ave neighs/atom = 1.6181167
+Ave special neighs/atom = 2
+Neighbor list builds = 232
+Dangerous builds = 0
+
+pair_coeff * * 3 0.7
+fix 1 all nve/limit 0.1
+run 5000
+Generated 0 of 3 mixed pair_coeff terms from geometric mixing rule
+Per MPI rank memory allocation (min/avg/max) = 74.87 | 74.87 | 74.87 Mbytes
+   Step          Temp          E_pair         E_mol          TotEng         Press     
+      5000   0.32385471     0.92744459     16.598338      18.01156       1.3983501    
+     10000   0.33237992     0.00096010416  16.497455      16.996981      0.79921556   
+Loop time of 169.398 on 1 procs for 5000 steps with 120000 atoms
+
+Performance: 255021.202 tau/day, 29.516 timesteps/s, 3.542 Matom-step/s
+100.0% CPU use with 1 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 71.657     | 71.657     | 71.657     |   0.0 | 42.30
+Bond    | 48.694     | 48.694     | 48.694     |   0.0 | 28.75
+Neigh   | 15.74      | 15.74      | 15.74      |   0.0 |  9.29
+Comm    | 0.87835    | 0.87835    | 0.87835    |   0.0 |  0.52
+Output  | 0.0008868  | 0.0008868  | 0.0008868  |   0.0 |  0.00
+Modify  | 26.238     | 26.238     | 26.238     |   0.0 | 15.49
+Other   |            | 6.189      |            |       |  3.65
+
+Nlocal:         120000 ave      120000 max      120000 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:         311432 ave      311432 max      311432 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 311432
+Ave neighs/atom = 2.5952667
+Ave special neighs/atom = 2
+Neighbor list builds = 132
+Dangerous builds = 0
+
+pair_coeff * * 5 0.9
+fix 1 all nve/limit 0.1
+run 5000
+Generated 0 of 3 mixed pair_coeff terms from geometric mixing rule
+Per MPI rank memory allocation (min/avg/max) = 75.64 | 75.64 | 75.64 Mbytes
+   Step          Temp          E_pair         E_mol          TotEng         Press     
+     10000   0.33237992     1.9901455      16.497455      18.986166      2.1638483    
+     15000   0.33154224     0.91227721     16.451655      17.861241      1.5368047    
+Loop time of 303.423 on 1 procs for 5000 steps with 120000 atoms
+
+Performance: 142375.474 tau/day, 16.479 timesteps/s, 1.977 Matom-step/s
+100.0% CPU use with 1 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 181.16     | 181.16     | 181.16     |   0.0 | 59.70
+Bond    | 47.197     | 47.197     | 47.197     |   0.0 | 15.55
+Neigh   | 42.9       | 42.9       | 42.9       |   0.0 | 14.14
+Comm    | 1.395      | 1.395      | 1.395      |   0.0 |  0.46
+Output  | 0.0010139  | 0.0010139  | 0.0010139  |   0.0 |  0.00
+Modify  | 24.925     | 24.925     | 24.925     |   0.0 |  8.21
+Other   |            | 5.849      |            |       |  1.93
+
+Nlocal:         120000 ave      120000 max      120000 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:         540194 ave      540194 max      540194 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 540194
+Ave neighs/atom = 4.5016167
+Ave special neighs/atom = 2
+Neighbor list builds = 307
+Dangerous builds = 0
+
+pair_coeff * * 7 1.0
+fix 1 all nve/limit 0.01
+run 5000
+Generated 0 of 3 mixed pair_coeff terms from geometric mixing rule
+Per MPI rank memory allocation (min/avg/max) = 76.4 | 76.4 | 76.4 Mbytes
+   Step          Temp          E_pair         E_mol          TotEng         Press     
+     15000   0.33154224     3.6481123      16.451655      20.597076      3.084913     
+     20000   0.0031603565   2.129965       13.528743      15.663449      2.0200913    
+Loop time of 340.698 on 1 procs for 5000 steps with 120000 atoms
+
+Performance: 126798.641 tau/day, 14.676 timesteps/s, 1.761 Matom-step/s
+100.0% CPU use with 1 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 228.81     | 228.81     | 228.81     |   0.0 | 67.16
+Bond    | 42.34      | 42.34      | 42.34      |   0.0 | 12.43
+Neigh   | 39.871     | 39.871     | 39.871     |   0.0 | 11.70
+Comm    | 0.96217    | 0.96217    | 0.96217    |   0.0 |  0.28
+Output  | 0.0005401  | 0.0005401  | 0.0005401  |   0.0 |  0.00
+Modify  | 23.686     | 23.686     | 23.686     |   0.0 |  6.95
+Other   |            | 5.026      |            |       |  1.48
+
+Nlocal:         120000 ave      120000 max      120000 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:         719976 ave      719976 max      719976 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 719976
+Ave neighs/atom = 5.9998
+Ave special neighs/atom = 2
+Neighbor list builds = 264
+Dangerous builds = 0
+
+pair_coeff * * 9 1.0
+fix 1 all nve/limit 0.01
+run 5000
+Generated 0 of 3 mixed pair_coeff terms from geometric mixing rule
+Per MPI rank memory allocation (min/avg/max) = 76.4 | 76.4 | 76.4 Mbytes
+   Step          Temp          E_pair         E_mol          TotEng         Press     
+     20000   0.0031603565   2.7385264      13.528743      16.27201       2.6358905    
+     25000   0.0031695856   2.4933903      13.541796      16.039941      2.4520375    
+Loop time of 356.768 on 1 procs for 5000 steps with 120000 atoms
+
+Performance: 121087.115 tau/day, 14.015 timesteps/s, 1.682 Matom-step/s
+100.0% CPU use with 1 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 248.71     | 248.71     | 248.71     |   0.0 | 69.71
+Bond    | 45.478     | 45.478     | 45.478     |   0.0 | 12.75
+Neigh   | 30.721     | 30.721     | 30.721     |   0.0 |  8.61
+Comm    | 0.82331    | 0.82331    | 0.82331    |   0.0 |  0.23
+Output  | 0.0006871  | 0.0006871  | 0.0006871  |   0.0 |  0.00
+Modify  | 25.627     | 25.627     | 25.627     |   0.0 |  7.18
+Other   |            | 5.413      |            |       |  1.52
+
+Nlocal:         120000 ave      120000 max      120000 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:         711161 ave      711161 max      711161 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 711161
+Ave neighs/atom = 5.9263417
+Ave special neighs/atom = 2
+Neighbor list builds = 187
+Dangerous builds = 0
+
+unfix 1
+neigh_modify every 1 delay 1
+timestep 0.01
+comm_modify cutoff 3.022462048309373
+pair_coeff * * 0 0
+
+pair_style hybrid cosine/squared 2.622462048309373
+pair_coeff 1 1 cosine/squared 0.9090909090909091 1.0663389458939043 1.0663389458939043 wca
+WARNING: Cosine/squared set to WCA only (cutoff = sigma)
+For more information see https://docs.lammps.org/err0021 (src/EXTRA-PAIR/pair_cosine_squared.cpp:158)
+pair_coeff 1 2 cosine/squared 0.9090909090909091 1.0663389458939043 1.0663389458939043 wca
+WARNING: Cosine/squared set to WCA only (cutoff = sigma)
+For more information see https://docs.lammps.org/err0021 (src/EXTRA-PAIR/pair_cosine_squared.cpp:158)
+pair_coeff 1 3 cosine/squared 0.9090909090909091 0.8979696386474985 0.8979696386474985 wca
+WARNING: Cosine/squared set to WCA only (cutoff = sigma)
+For more information see https://docs.lammps.org/err0021 (src/EXTRA-PAIR/pair_cosine_squared.cpp:158)
+pair_coeff 2 2 cosine/squared 0.9090909090909091 1.122462048309373 2.622462048309373 wca
+pair_coeff 2 3 cosine/squared 0.9090909090909091 0.7296003314010925 0.7296003314010925 wca
+WARNING: Cosine/squared set to WCA only (cutoff = sigma)
+For more information see https://docs.lammps.org/err0021 (src/EXTRA-PAIR/pair_cosine_squared.cpp:158)
+pair_coeff 3 3 cosine/squared 0.9090909090909091 0.7296003314010925 0.7296003314010925 wca
+WARNING: Cosine/squared set to WCA only (cutoff = sigma)
+For more information see https://docs.lammps.org/err0021 (src/EXTRA-PAIR/pair_cosine_squared.cpp:158)
+
+minimize 1.0e-4 1.0e-6 100 1000
+Switching to 'neigh_modify every 1 delay 0 check yes' setting during minimization
+Generated 0 of 3 mixed pair_coeff terms from geometric mixing rule
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 2.922462
+  ghost atom cutoff = 3.022462
+  binsize = 1.461231, bins = 53 53 53
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair cosine/squared, perpetual
+      attributes: half, newton on, cut 2.922462048309373
+      pair build: half/bin/newton
+      stencil: half/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 85.12 | 85.12 | 85.12 Mbytes
+   Step          Temp          E_pair         E_mol          TotEng         Press     
+     25000   0.0031695856   8.4060817e+22  13.541796      8.4060817e+22  9.1916625e+22
+WARNING: FENE bond too long: 25036 35920 35921 1.435502930831211 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25037 35920 35921 1.4388361846422353 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25038 35920 35921 1.4561686927027386 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25038 108526 108527 1.437338974139418 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25038 51454 51455 1.425402126141038 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25038 75802 75803 1.433942388864319 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25038 27256 27257 1.451844592206607 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25038 107830 107831 1.4519124970240507 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25038 50404 50405 1.429937365276929 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25038 35830 35831 1.4337461449711815 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25039 35920 35921 1.460329260163874 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25039 108526 108527 1.4454165710137072 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25039 51454 51455 1.431886351719146 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25039 75802 75803 1.4425265259807958 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25039 27256 27257 1.4525238910382916 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25039 107830 107831 1.4532961075009427 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25039 50404 50405 1.4370822965949637 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25039 99400 99401 1.42786250330301 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25039 35830 35831 1.4373164133900054 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25040 109270 109271 1.4279502357867342 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25040 25043 25044 1.4379544395827828 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25040 35920 35921 1.484472412596997 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25040 108526 108527 1.489377948138649 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25040 14633 14634 1.4529982020535994 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25040 77872 77873 1.4524077051709974 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25040 24862 24863 1.4503635691714394 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25040 41590 41591 1.456816785066816 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25040 51454 51455 1.4653263199097468 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25040 75802 75803 1.4881558178953045 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25040 95854 95855 1.4284258367655804 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25040 27256 27257 1.451073389395164 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25040 45826 45827 1.449790336839379 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25040 107830 107831 1.4510197001714864 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25040 50404 50405 1.4736187973123476 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25040 99400 99401 1.4669741768376485 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25040 35830 35831 1.4505881347035767 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25040 59843 59844 1.4261247105998645 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25041 109270 109271 1.4330659495015428 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25041 25043 25044 1.4429700801842689 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25041 35920 35921 1.4902653661351035 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25041 76973 76974 1.486292568178939 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25041 108526 108527 1.4983573080433137 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25041 14633 14634 1.4608573222511523 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25041 77872 77873 1.4589004475628593 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25041 24862 24863 1.4571318409862501 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25041 41590 41591 1.4650569693685467 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25041 51454 51455 1.4723858124541813 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25041 75802 75803 1.4982299539678157 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25041 95854 95855 1.4313175914043832 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25041 27256 27257 1.49616876758891 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25041 45826 45827 1.4552024337368388 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25041 107830 107831 1.4816532597620333 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25041 50404 50405 1.4824191198478398 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25041 99400 99401 1.4758763838819977 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25041 35830 35831 1.465057167622087 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25041 59843 59844 1.429868005819561 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25042 109270 109271 1.4539099883363191 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25042 25043 25044 1.4637452123517927 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25042 35920 35921 1.5132526122206593 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25042 76973 76974 1.4315173490454847 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25042 108526 108527 1.5336801910057418 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25042 14633 14634 1.4907008678607505 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25042 77872 77873 1.481169412424534 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25042 24862 24863 1.4838748891571445 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25042 41590 41591 1.4981743973423058 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25042 51454 51455 1.49827357157083 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25042 75802 75803 1.5374022213121552 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25042 68044 68045 1.4300756118080695 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25042 95854 95855 1.4471406536939877 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25042 27256 27257 1.4899296437173264 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25042 45826 45827 1.4810841903089424 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25042 107830 107831 1.499204512741481 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25042 1168 1169 1.4530520296281852 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25042 50404 50405 1.51672088017173 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25042 99400 99401 1.509245746454333 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25042 35830 35831 1.4872599759404883 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25042 59843 59844 1.445618118252904 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25043 109270 109271 1.4556838358962856 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25043 25043 25044 1.4656320534526128 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25043 35920 35921 1.5152680729090022 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25043 76973 76974 1.4418104303802823 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25043 108526 108527 1.5367115790701877 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25043 86506 86507 1.424718402350117 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25043 14633 14634 1.493305273712971 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25043 77872 77873 1.4830260373059618 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25043 24862 24863 1.4862756733706848 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25043 41590 41591 1.5012459265816602 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25043 51454 51455 1.5005368954899958 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25043 75802 75803 1.5409080312791317 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25043 68044 68045 1.4321827319877964 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25043 95854 95855 1.4489573077920674 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25043 27256 27257 1.4965954550501401 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25043 45826 45827 1.4836686700380053 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25043 107830 107831 1.5004862874933242 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: FENE bond too long: 25043 1168 1169 1.456703664167486 (src/MOLECULE/bond_fene.cpp:89)
+WARNING: Too many warnings: 1682 vs 100. All future warnings will be suppressed
+     25100   0.0031695856   1.9834633      16.062658      18.050875      15.631321    
+Loop time of 138.832 on 1 procs for 100 steps with 120000 atoms
+
+100.0% CPU use with 1 MPI tasks x 1 OpenMP threads
+
+Minimization stats:
+  Stopping criterion = max iterations
+  Energy initial, next-to-last, final = 
+    8.40608173486869e+22   18.1200431737019   18.0461209164364
+  Force two-norm initial, final = 2.8413564e+31 9023.8358
+  Force max component initial, final = 1.8401115e+31 812.19602
+  Final line search alpha, max atom move = 9.4373539e-05 0.076649812
+  Iterations, force evaluations = 100 235
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 128.21     | 128.21     | 128.21     |   0.0 | 92.35
+Bond    | 3.0333     | 3.0333     | 3.0333     |   0.0 |  2.18
+Neigh   | 6.1134     | 6.1134     | 6.1134     |   0.0 |  4.40
+Comm    | 0.039788   | 0.039788   | 0.039788   |   0.0 |  0.03
+Output  | 0.0020037  | 0.0020037  | 0.0020037  |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 1.43       |            |       |  1.03
+
+Nlocal:         120000 ave      120000 max      120000 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    8.38434e+06 ave 8.38434e+06 max 8.38434e+06 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 8384339
+Ave neighs/atom = 69.869492
+Ave special neighs/atom = 2
+Neighbor list builds = 11
+Dangerous builds = 0
+fix langevin all langevin 1.0 1.0 1.0 1 zero yes
+fix nve all nve
+dump dump all netcdf 500 output_rhd0.65_x0.80_seed1.nc xu yu zu
+
+restart 5000 out.a.restart out.b.restart
+fix f_avetime all ave/time 1 100 100 c_thermo_temp[*] c_thermo_press[*] mode scalar ave one
+thermo 2000
+thermo_style custom step dt time cpu fmax fnorm temp ke pe ebond eangle epair pxx pyy pzz xlo xhi ylo yhi zlo zhi c_thermo_temp[*] c_thermo_press[*] f_f_avetime[*]
+run 20000
+Generated 0 of 3 mixed pair_coeff terms from geometric mixing rule
+Per MPI rank memory allocation (min/avg/max) = 76.12 | 76.12 | 76.12 Mbytes
+   Step           Dt            Time           CPU            Fmax          Fnorm           Temp          KinEng         PotEng         E_bond        E_angle         E_pair          Pxx            Pyy            Pzz            Xlo            Xhi            Ylo            Yhi            Zlo            Zhi       c_thermo_temp[1] c_thermo_temp[2] c_thermo_temp[3] c_thermo_temp[4] c_thermo_temp[5] c_thermo_temp[6] c_thermo_press[1] c_thermo_press[2] c_thermo_press[3] c_thermo_press[4] c_thermo_press[5] c_thermo_press[6] f_f_avetime[1] f_f_avetime[2] f_f_avetime[3] f_f_avetime[4] f_f_avetime[5] f_f_avetime[6] f_f_avetime[7] f_f_avetime[8] f_f_avetime[9] f_f_avetime[10] f_f_avetime[11] f_f_avetime[12]
+WARNING: Too many warnings: 1691 vs 100. All future warnings will be suppressed
+     25100   0.01           2500           0              830.0928       12395.041      0.0031695856   0.0047543388   18.046121      15.969464      0.093193997    1.9834633      15.621367      15.626573      15.646023     -38             38            -38             38            -38             38             0.0031583392   0.0031647674   0.0031855709   1.745921e-06  -7.8358919e-06  3.4952012e-07  15.621367      15.626573      15.646023     -0.037054094   -0.0077529993   0.027112827    0              0              0              0              0              0              0              0              0              0              0              0            
+ERROR on proc 0: Bond atoms 76942 76943 missing on proc 0 at step 25106
+For more information see https://docs.lammps.org/err0005 (src/ntopo_bond_all.cpp:59)

@@ -1,0 +1,72 @@
+processors * * 1
+
+units lj
+atom_style angle
+dimension 3
+boundary p p p
+timestep 0.1
+
+read_data vesicle.data
+group all type 1 2 3
+group membrane type 1 2 3
+group heads type 1 3
+bond_style hybrid fene
+special_bonds lj 0.0 1.0 1.0
+bond_coeff 1 fene 30.0 1.5 1.0 1.0
+
+angle_style hybrid harmonic
+angle_coeff 1 harmonic 5.0 180.0
+
+comm_modify cutoff 2.0
+pair_style soft 1.0
+
+pair_coeff * * 1 0.5
+fix 1 all nve/limit 0.1
+run 5000
+
+pair_coeff * * 3 0.7
+fix 1 all nve/limit 0.1
+run 5000
+
+pair_coeff * * 5 0.9
+fix 1 all nve/limit 0.1
+run 5000
+
+pair_coeff * * 7 1.0
+fix 1 all nve/limit 0.01
+run 5000
+
+pair_coeff * * 9 1.0
+fix 1 all nve/limit 0.01
+run 5000
+
+unfix 1
+neigh_modify every 1 delay 1
+timestep 0.01
+comm_modify cutoff 3.022462048309373
+pair_coeff * * 0 0
+
+pair_style hybrid cosine/squared 2.622462048309373
+pair_coeff 1 1 cosine/squared 0.9090909090909091 1.0663389458939043 1.0663389458939043 wca
+pair_coeff 1 2 cosine/squared 0.9090909090909091 1.0663389458939043 1.0663389458939043 wca
+pair_coeff 1 3 cosine/squared 0.9090909090909091 0.9821542922707014 0.9821542922707014 wca
+pair_coeff 2 2 cosine/squared 0.9090909090909091 1.122462048309373 2.622462048309373 wca
+pair_coeff 2 3 cosine/squared 0.9090909090909091 0.8979696386474985 0.8979696386474985 wca
+pair_coeff 3 3 cosine/squared 0.9090909090909091 0.8979696386474985 0.8979696386474985 wca
+
+minimize 1.0e-4 1.0e-6 100 1000 
+fix langevin all langevin 1.0 1.0 1.0 1 zero yes
+fix nve all nve
+dump dump all netcdf 1000 output_rhd0.80_x0.40_seed1.nc xu yu zu
+
+fix f_avetime all ave/time 1 100 100 c_thermo_temp[*] c_thermo_press[*] mode scalar ave one
+thermo 2000
+thermo_style custom step dt time cpu fmax fnorm temp ke pe ebond eangle epair pxx pyy pzz xlo xhi ylo yhi zlo zhi c_thermo_temp[*] c_thermo_press[*] f_f_avetime[*]
+
+
+region vesicle_B block 0 68 -28.0 28.0 -28.0 28.0 side in
+group vesicle_B region vesicle_B
+fix force vesicle_B addforce -.5 0.0 0.0
+run 5000
+unfix force
+run 10000
