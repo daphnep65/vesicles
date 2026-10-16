@@ -6,45 +6,45 @@ def main():
     cfg = configparser.ConfigParser()
     cfg.read('cfg.ini')
 
-    fraction_bilayer = float(cfg['_']['Bilayer_fraction']) 
-    km = float(cfg['_']['km']) 
+    fraction_negative_curve = float(cfg['_']['negative_curve_fraction']) 
+    reduced_head_diameter = float(cfg['_']['reduced_head_diameter']) 
     seed = int(cfg['_']['seed'])
-    temperature_water = float(cfg['_']['temperature_water'])
-    epsilon_water_lipid_head_ratio=  float(cfg['_']['epsilon_water_lipid_head_ratio'])
-    epsilon_water_lipid_tail_ratio=  float(cfg['_']['epsilon_water_lipid_tail_ratio'])
-    pressure = float(cfg['_']['pressure'])
-    radius = float(cfg['_']['R'])
+    # pressure = float(cfg['_']['pressure'])
+    temperature = float(cfg['_']['temperature']) 
 
-    if fraction_bilayer ==0.0:
-        if km==0.:
-            temperature=1.2    
-        else:
-            temperature=1.3+(km/10.)
-    elif fraction_bilayer ==1.0:
-        temperature=1.1 
-    else:                           # Any time there is a micture between bilayers and bolapipids, to match miguel figures lets only use this for when kbola=2 and T=1.3
-        temperature= 1.3            # From miguel paper membrane is fluid for this case from bilayer fractions>=0.1
+    # if fraction_bilayer ==0.0:
+    #     if km==0.:
+    #         temperature=1.2    
+    #     else:
+    #         temperature=1.3+(km/10.)
+    # elif fraction_bilayer ==1.0:
+    #     temperature=1.1 
+    # else:                           # Any time there is a micture between bilayers and bolapipids, to match miguel figures lets only use this for when kbola=2 and T=1.3
+    #     temperature= 1.3            # From miguel paper membrane is fluid for this case from bilayer fractions>=0.1
 
     sigma = 1
-    omega_mem = 1.5
     omega = 1.5
-    omega2 = 0.5                    # Short range interaction for membrane-water 
     epsilon=1./temperature
-    epsilon_33=1./temperature_water
-    epsilon_13=epsilon_33*epsilon_water_lipid_head_ratio
-    epsilon_23=epsilon_33*epsilon_water_lipid_tail_ratio
-    sigma_11=sigma*0.95*2**(1/6)
-    cutoff_11=sigma*0.95*2**(1/6)
-    sigma_12=sigma*0.95*2**(1/6) 
-    cutoff_12=sigma*0.95*2**(1/6)
-    sigma_13=sigma*0.95*2**(1/6)
-    cutoff_13=sigma*0.95*2**(1/6)+omega2
-    sigma_22=2**(1/6)
-    cutoff_22=2**(1/6)+omega_mem
-    sigma_23=sigma*2**(1/6) 
-    cutoff_23=sigma*2**(1/6)
-    sigma_33=sigma*2**(1/6) 
-    cutoff_33=sigma*2**(1/6)+omega
+    
+    sigma_11=sigma*0.95 * 2**(1/6)
+    cutoff_11=sigma_11
+    
+    sigma_12=sigma*0.95 * 2**(1/6) 
+    cutoff_12=sigma_12
+
+    sigma_22=sigma * 2**(1/6)
+    cutoff_22=sigma_22+omega
+    
+    sigma_33=sigma*reduced_head_diameter * 2**(1/6)
+    cutoff_33=sigma_33
+    
+    sigma_23=sigma*reduced_head_diameter * 2**(1/6)
+    cutoff_23=sigma_23
+    
+    #sigma_13=(sigma_11+sigma_33)/2                             # simple mixing rule
+    sigma_13=sigma*reduced_head_diameter * 2**(1/6)             # same as sigma_23 (CD rule)
+    cutoff_13=sigma_13                  
+
 
 
     outfile='in.local'
@@ -57,21 +57,20 @@ def main():
     f.write("boundary p p p" + '\n')  
     f.write("timestep 0.1" + '\n')  
     f.write('\n')
-    f.write("read_data plane.data" + '\n')  
+    f.write("read_data vesicle.data" + '\n')  
     f.write("group all type 1 2 3" + '\n')  
-    f.write("group membrane type 1 2" + '\n')  
-    f.write("group water type 3" + '\n')  
+    f.write("group membrane type 1 2 3" + '\n')
+    f.write("group heads type 1 3" + "\n")    
     f.write("bond_style hybrid fene" + '\n') 
     f.write("special_bonds lj 0.0 1.0 1.0" + '\n') 
     f.write("bond_coeff 1 fene 30.0 1.5 1.0 1.0" + '\n') 
     f.write('\n')
     f.write("angle_style hybrid harmonic" + '\n')  
-    f.write("angle_coeff 1 harmonic 5.0 180.0" + '\n')  
-    if fraction_bilayer !=1.0:
-        f.write("angle_coeff 2 harmonic" + ' ' + str(km) + ' 180.0'+ '\n')  
+    f.write("angle_coeff 1 harmonic 5.0 180.0" + '\n')    
     f.write('\n')
     f.write("comm_modify cutoff 2.0" + '\n')  
-    f.write("pair_style soft 1.0" + '\n')  
+    f.write("pair_style soft 1.0" + '\n')
+    f.write('\n')  
     f.write("pair_coeff * * 1 0.5" + '\n') 
     f.write("fix 1 all nve/limit 0.1" + '\n')  
     f.write("run 5000" + '\n')     
@@ -98,14 +97,13 @@ def main():
     f.write("comm_modify cutoff 3.022462048309373" + '\n')  
     f.write("pair_coeff * * 0 0" + '\n')    
     f.write('\n')
-    f.write("pair_style hybrid cosine/squared" + " " + str(cutoff_22)+ '\n')         # 1 head 2 tail 3 water
+    f.write("pair_style hybrid cosine/squared" + " " + str(cutoff_22)+ '\n')         # 1 head 2 tail 3 NIC head
     f.write("pair_coeff 1 1 cosine/squared" + " " + str(epsilon) + " " + str(sigma_11) + " " + str(cutoff_11) + " " + "wca\n")
     f.write("pair_coeff 1 2 cosine/squared" + " " + str(epsilon) + " " + str(sigma_12) + " " + str(cutoff_12) + " " + "wca\n")
-    f.write("pair_coeff 1 3 cosine/squared" + " " + str(epsilon_13) + " " + str(sigma_13) + " " + str(cutoff_13) + " " + "wca\n")
+    f.write("pair_coeff 1 3 cosine/squared" + " " + str(epsilon) + " " + str(sigma_13) + " " + str(cutoff_13) + " " + "wca\n")
     f.write("pair_coeff 2 2 cosine/squared" + " " + str(epsilon) + " " + str(sigma_22) + " " + str(cutoff_22) + " " + "wca\n")
-    f.write("pair_coeff 2 3 cosine/squared" + " " + str(epsilon_23) + " " + str(sigma_23) + " " + str(cutoff_23) + " " + "wca\n") #purely repulsive
-    f.write("pair_coeff 3 3 cosine/squared" + " " + str(epsilon_33) + " " + str(sigma_33) + " " + str(cutoff_33) + " " + "wca\n")
-    f.write('\n')
+    f.write("pair_coeff 2 3 cosine/squared" + " " + str(epsilon) + " " + str(sigma_23) + " " + str(cutoff_23) + " " + "wca\n")
+    f.write("pair_coeff 3 3 cosine/squared" + " " + str(epsilon) + " " + str(sigma_33) + " " + str(cutoff_33) + " " + "wca\n\n")
 
     # f.write("variable lx equal lx"+ '\n')
     # f.write("variable ly equal ly"+ '\n')
@@ -193,24 +191,30 @@ def main():
 
 
     f.write("minimize 1.0e-4 1.0e-6 100 1000 "+'\n')
-    # f.write("fix langevin all langevin 1.0 1.0 1.0" + ' ' + str(seed) +  ' zero yes'+ '\n')
-    # f.write("fix fNPH membrane nph x 0 0 10. y 0 0 10. couple xy dilate all" + '\n')  
-    # f.write("fix pNVE water nve\n")
-
-    # f.write("run 200000" + '\n')  
-    # f.write("unfix fNPH" + '\n')
-    # f.write("unfix langevin" + '\n')
     f.write("fix langevin all langevin 1.0 1.0 1.0" + ' ' + str(seed) +  ' zero yes'+ '\n')
-    f.write("fix fNPH membrane nph x" +' '+str(pressure)+' '+str(pressure) +' '+"10. y"+' '+str(pressure)+' '+str(pressure)+' '+ "10. couple xy dilate membrane" + '\n')  
-    f.write("fix pNVE water nve\n")
-    f.write(f"dump dump all netcdf 50000 output_spp{epsilon_33}sph{epsilon_13}radius{radius}kbola{km}fraction_bilayer{fraction_bilayer}.nc xu yu zu\n")
+    #f.write("fix fNPH membrane nph x" +' '+str(pressure)+' '+str(pressure) +' '+"10. y"+' '+str(pressure)+' '+str(pressure)+' '+ "10. couple xy dilate membrane" + '\n')  
+    f.write("fix nve all nve\n\n")
     
-    f.write("restart 5000 out.a.restart out.b.restart" + '\n')
+    f.write(f"dump eq all netcdf 1000 eq_x{fraction_negative_curve:.2f}_rhd{reduced_head_diameter:.2f}.nc xu yu zu\n")    
+    f.write("restart 5000 out.a.restart out.b.restart" + '\n\n')
+    
     f.write("fix f_avetime all ave/time 1 100 100 c_thermo_temp[*] c_thermo_press[*] mode scalar ave one"+ '\n') 
     f.write("thermo 2000"+ '\n')
-    f.write("thermo_style custom step dt time cpu fmax fnorm temp ke pe ebond eangle epair pxx pyy pzz xlo xhi ylo yhi zlo zhi c_thermo_temp[*] c_thermo_press[*] f_f_avetime[*]"+ '\n') 
-    f.write("run 8000000" + '\n')
-           
+    f.write("thermo_style custom step dt time cpu fmax fnorm temp ke pe ebond eangle epair pxx pyy pzz xlo xhi ylo yhi zlo zhi c_thermo_temp[*] c_thermo_press[*] f_f_avetime[*]"+ '\n\n') 
+    
+    f.write("run 10000" + '\n\n')
+    
+    f.write("region vesicle_B block 0 68 -28.0 28.0 -28.0 28.0 side in" + '\n')
+    f.write("group vesicle_B region vesicle_B" + '\n')
+    f.write("fix force vesicle_B addforce -.2 0.0 0.0" + '\n')
+    f.write("run 10000" + '\n')
+    f.write("unfix force" + '\n\n')
+    
+    f.write(f"dump output all netcdf 5000 output_x{fraction_negative_curve:.2f}_rhd{reduced_head_diameter:.2f}.nc xu yu zu\n") 
+    
+    f.write("run 10000" + '\n\n')
+    f.write("undump eq" + '\n\n') 
+    f.write("run 500000" + '\n')
 
     f.close()
 
