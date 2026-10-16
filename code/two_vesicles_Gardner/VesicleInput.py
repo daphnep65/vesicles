@@ -57,7 +57,7 @@ def main():
     f.write("boundary p p p" + '\n')  
     f.write("timestep 0.1" + '\n')  
     f.write('\n')
-    f.write("read_data vesicle.data" + '\n')  
+    f.write("read_data vesicles.data" + '\n')  
     f.write("group all type 1 2 3" + '\n')  
     f.write("group membrane type 1 2 3" + '\n')
     f.write("group heads type 1 3" + "\n")    

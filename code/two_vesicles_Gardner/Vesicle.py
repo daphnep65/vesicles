@@ -512,11 +512,11 @@ def main():
             f.write(f"{i+1} {HeadOrTailAngle(i, fraction_soft_bolalipids)} "
                     f"{i+1+(i//4)*2} {i+2+(i//4)*2} {i+3+(i//4)*2}\n")
         for i in range(Nangles_bila):
-            base = i + Nangles_bola + (Nangles_bola // 4) * 2
+            base = i + Natoms_bola
             f.write(f"{i+Nangles_bola+1} 1 "
                     f"{base+1 + (i//1)*2} {base+2 + (i//1)*2} {base+3 + (i//1)*2}\n")
         for i in range(Nangles_bila_B):
-            base = i + Nangles_bola + Nangles_bila + (Nangles_bola // 4) * 2
+            base = i + Natoms_bola + Natoms_bila
             f.write(f"{i+Nangles_bola+Nangles_bila+1} 1 "
                     f"{base+1 + (i//1)*2} {base+2 + (i//1)*2} {base+3 + (i//1)*2}\n")
 
