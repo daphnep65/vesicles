@@ -1,12 +1,1 @@
-cluster_example/
-cluster_old/
-local_code/
-force_trials/
-match_code/
-run_double_rdh0.80_x0.40/
-run_rdh0.65_x0.50/
-trial_mixing_rules/
-vesicle_NIC_run/
-vesicle_double/
-vesicle_double_force/
-vesicle_single_run/
+./data
