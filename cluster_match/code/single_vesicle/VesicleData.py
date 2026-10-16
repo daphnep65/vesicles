@@ -32,7 +32,7 @@ def clamp_fraction(value, name):
 
 
 def make_negative_curved_lipid_mask(n_lipids, negative_curved_fraction):
-    """Deterministically pick round(fraction * n_lipids) bolalipid blocks for the
+    """Deterministically pick round(fraction * n_lipids) lipids for the
     negative-curvature (type 3) head, evenly spread through the list."""
     n_lipids = int(n_lipids)
     fraction = clamp_fraction(negative_curved_fraction, "negative_curved_fraction")

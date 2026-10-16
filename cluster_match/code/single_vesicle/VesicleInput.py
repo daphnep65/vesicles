@@ -41,7 +41,8 @@ def main():
     sigma_23=sigma*reduced_head_diameter * 2**(1/6)
     cutoff_23=sigma_23
     
-    sigma_13=(sigma_11+sigma_33)/2      # simple mixing rule
+    sigma_13=(sigma_11+sigma_33)/2                             # simple mixing rule
+    #sigma_13=sigma*reduced_head_diameter * 2**(1/6)             # same as sigma_23 (CD mixing rule)
     cutoff_13=sigma_13                  
 
 
