@@ -428,7 +428,7 @@ def main():
         
         
 
-    outfile = 'vesicle_normal.data'
+    outfile = 'vesicle.data'
     with open(outfile, 'w') as f:
         f.write('LAMMPS data file\n\n')
         f.write(f'{Natoms} atoms\n')
